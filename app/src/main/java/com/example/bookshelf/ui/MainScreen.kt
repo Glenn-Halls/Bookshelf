@@ -33,11 +33,16 @@ fun BookshelfMainScreen(
             )
         }
     ) { innerPadding ->
-        SearchScreen(
-            uiState = uiState,
-            searchStringUpdate = { viewModel.updateSearchQuery(it) },
-            onSearchClicked = { viewModel.doSearch() },
-            modifier = Modifier.padding(innerPadding))
+        if (!uiState.searchComplete) {
+            SearchScreen(
+                uiState = uiState,
+                searchStringUpdate = { viewModel.updateSearchQuery(it) },
+                onSearchClicked = { viewModel.doSearch() },
+                modifier = Modifier.padding(innerPadding)
+            )
+        } else {
+            ResultScreen(displayText = "test")
+        }
     }
 }
 
