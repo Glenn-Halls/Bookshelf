@@ -25,7 +25,7 @@ class MainActivity : ComponentActivity() {
                     val viewModel: BookshelfViewModel = viewModel()
                     BookshelfMainScreen(
                         viewModel = viewModel,
-                        onBackButtonClick = { /*TODO*/ },
+                        onBackButtonClick = { viewModel.resetSearch() },
                     )
                 }
             }

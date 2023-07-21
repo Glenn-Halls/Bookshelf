@@ -25,6 +25,7 @@ fun BookshelfMainScreen(
 ) {
     // uiState holds all state values needed by subsequent Composables
     val uiState = viewModel.uiState.collectAsState().value
+    val networkStatus = viewModel.networkUiState.collectAsState().value
 
     Scaffold(
         topBar = {
@@ -36,12 +37,16 @@ fun BookshelfMainScreen(
         if (!uiState.searchComplete) {
             SearchScreen(
                 uiState = uiState,
+                networkStatus = networkStatus,
                 searchStringUpdate = { viewModel.updateSearchQuery(it) },
                 onSearchClicked = { viewModel.doSearch() },
                 modifier = Modifier.padding(innerPadding)
             )
         } else {
-            ResultScreen(displayText = "test")
+            ResultScreen(
+                onBackHandler = onBackButtonClick,
+                displayText = networkStatus.bookList,
+                modifier = Modifier.padding(innerPadding))
         }
     }
 }
