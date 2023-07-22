@@ -10,6 +10,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import retrofit2.HttpException
+import java.io.IOException
 
 sealed interface NetworkUiState {
     data class Success(val bookList: String) : NetworkUiState
@@ -49,13 +51,20 @@ class BookshelfViewModel : ViewModel() {
                 searchQuery = "",
             )
         }
-        networkUiState = NetworkUiState.Error
+        networkUiState = NetworkUiState.Loading
     }
 
     private fun getBooks() {
         viewModelScope.launch {
-            val result = BookshelfApi.retrofitService.getBooks()
-            networkUiState = NetworkUiState.Success(result)
+            networkUiState = try {
+                val result = BookshelfApi.retrofitService.getBooks()
+                NetworkUiState.Success(result)
+            } catch (e: IOException) {
+                NetworkUiState.Error
+            } catch (e: HttpException) {
+                NetworkUiState.Error
+            }
         }
     }
 }
+
