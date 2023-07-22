@@ -44,7 +44,7 @@ fun SearchScreen(
                         "\n${uiState.searchInstructions}" +
                         "\n${uiState.searchComplete}" +
                         "\n${uiState.searchQuery}" +
-                        "\n${networkStatus.bookList}",
+                        "\n${networkStatus.toString()}",
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth()
             )

@@ -25,7 +25,7 @@ fun BookshelfMainScreen(
 ) {
     // uiState holds all state values needed by subsequent Composables
     val uiState = viewModel.uiState.collectAsState().value
-    val networkStatus = viewModel.networkUiState.collectAsState().value
+    val networkStatus = viewModel.networkUiState
 
     Scaffold(
         topBar = {
@@ -45,8 +45,8 @@ fun BookshelfMainScreen(
         } else {
             ResultScreen(
                 onBackHandler = onBackButtonClick,
-                displayText = networkStatus.bookList,
-                modifier = Modifier.padding(innerPadding))
+                networkStatus = networkStatus,
+            )
         }
     }
 }
