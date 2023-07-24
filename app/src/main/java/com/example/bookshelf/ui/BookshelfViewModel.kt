@@ -56,9 +56,12 @@ class BookshelfViewModel : ViewModel() {
 
     private fun getBooks() {
         viewModelScope.launch {
-            networkUiState = try {
-                val result = BookshelfApi.retrofitService.getBooks()
-                NetworkUiState.Success(result)
+            networkUiState = NetworkUiState.Loading
+            networkUiState = try{
+                val searchResult = BookshelfApi.retrofitService.getBooks()
+                NetworkUiState.Success(
+                    "Success, ${searchResult.totalItems} results found."
+                )
             } catch (e: IOException) {
                 NetworkUiState.Error
             } catch (e: HttpException) {
