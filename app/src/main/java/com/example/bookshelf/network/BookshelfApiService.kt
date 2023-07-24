@@ -7,7 +7,7 @@ import retrofit2.Retrofit
 import retrofit2.http.GET
 
 private const val BASE_URL = "https://www.googleapis.com"
-private const val BOOKSHELF_ENDPOINT = "books/v1/volumes?q=Antisr&maxResults=40"
+private const val BOOKSHELF_ENDPOINT = "books/v1/volumes?q=jazz+history"
 private val json = Json { ignoreUnknownKeys = true }
 
 private val retrofit = Retrofit.Builder()

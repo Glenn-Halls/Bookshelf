@@ -8,4 +8,6 @@ data class BookItem(
     val id: String,
     @SerialName(value = "selfLink")
     val link: String,
+    @SerialName(value = "volumeInfo")
+    val bookInfo: BookInfo? = BookInfo()
 )

@@ -5,8 +5,10 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class BookInfo(
-    val title: String,
+    val title: String? = "Title Not Available",
     @SerialName(value = "publishedDate")
-    val date: String,
-    val description: String,
+    val date: String? = "Date Not Available",
+    val description: String? = "",
+    @SerialName(value = "imageLinks")
+    val bookCover: BookCover? = BookCover()
 )

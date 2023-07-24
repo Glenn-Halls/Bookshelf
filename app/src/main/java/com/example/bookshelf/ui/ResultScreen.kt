@@ -69,7 +69,19 @@ fun SuccessScreen(
         )
         bookList.forEach {
             Text(
-                text = it.link
+                text = it.bookInfo!!.title.toString()
+            )
+            Text(
+                text = it.bookInfo.date.toString()
+            )
+            Text(
+                text = it.bookInfo.description.toString()
+            )
+            Text(
+                text = it.bookInfo.bookCover!!.thumbnail.toString()
+            )
+            Text(
+                text = "\n"
             )
         }
     }
