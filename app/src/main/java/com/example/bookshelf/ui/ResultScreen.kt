@@ -34,6 +34,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.example.bookshelf.network.BookItem
 import kotlinx.coroutines.delay
 
 @Composable
@@ -48,20 +49,29 @@ fun ResultScreen(
         when (networkStatus) {
             is NetworkUiState.Error -> ErrorScreen(onTryAgainButton)
             is NetworkUiState.Loading -> LoadingScreen()
-            is NetworkUiState.Success -> SuccessScreen(text = networkStatus.bookList)
+            is NetworkUiState.Success -> SuccessScreen(
+                topText = networkStatus.searchResult.totalItems.toString(),
+                bookList = networkStatus.searchResult.items
+            )
         }
     }
 }
 
 @Composable
 fun SuccessScreen(
-    text: String,
+    topText: String,
+    bookList: List<BookItem>,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
         Text(
-            text = text,
+            text = "Your search yielded $topText results:\n",
         )
+        bookList.forEach {
+            Text(
+                text = it.link
+            )
+        }
     }
 }
 
