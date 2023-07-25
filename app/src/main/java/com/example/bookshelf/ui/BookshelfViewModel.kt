@@ -5,8 +5,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.bookshelf.data.NetworkBookRepository
 import com.example.bookshelf.network.Book
-import com.example.bookshelf.network.BookshelfApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -59,7 +59,8 @@ class BookshelfViewModel : ViewModel() {
         viewModelScope.launch {
             networkUiState = NetworkUiState.Loading
             networkUiState = try{
-                val searchResult = BookshelfApi.retrofitService.getBooks()
+                val dataRepository = NetworkBookRepository()
+                val searchResult = dataRepository.getBooks()
                 NetworkUiState.Success(searchResult.items)
             } catch (e: IOException) {
                 NetworkUiState.Error
