@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class BookItem(
+data class Book(
     val id: String,
     @SerialName(value = "selfLink")
     val link: String,

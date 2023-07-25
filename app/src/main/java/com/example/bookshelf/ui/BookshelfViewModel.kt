@@ -5,8 +5,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.bookshelf.network.Book
 import com.example.bookshelf.network.BookshelfApi
-import com.example.bookshelf.network.SearchResult
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -15,7 +15,7 @@ import retrofit2.HttpException
 import java.io.IOException
 
 sealed interface NetworkUiState {
-    data class Success(val searchResult: SearchResult) : NetworkUiState
+    data class Success(val searchResult: List<Book>) : NetworkUiState
     object Error : NetworkUiState
     object Loading : NetworkUiState
 }
@@ -60,7 +60,7 @@ class BookshelfViewModel : ViewModel() {
             networkUiState = NetworkUiState.Loading
             networkUiState = try{
                 val searchResult = BookshelfApi.retrofitService.getBooks()
-                NetworkUiState.Success(searchResult)
+                NetworkUiState.Success(searchResult.items)
             } catch (e: IOException) {
                 NetworkUiState.Error
             } catch (e: HttpException) {

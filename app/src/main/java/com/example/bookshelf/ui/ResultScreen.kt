@@ -34,7 +34,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.example.bookshelf.network.BookItem
+import com.example.bookshelf.network.Book
 import kotlinx.coroutines.delay
 
 @Composable
@@ -50,8 +50,8 @@ fun ResultScreen(
             is NetworkUiState.Error -> ErrorScreen(onTryAgainButton)
             is NetworkUiState.Loading -> LoadingScreen()
             is NetworkUiState.Success -> SuccessScreen(
-                topText = networkStatus.searchResult.totalItems.toString(),
-                bookList = networkStatus.searchResult.items
+                networkStatus.searchResult.size.toString(),
+                bookList = networkStatus.searchResult
             )
         }
     }
@@ -60,7 +60,7 @@ fun ResultScreen(
 @Composable
 fun SuccessScreen(
     topText: String,
-    bookList: List<BookItem>,
+    bookList: List<Book>,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
