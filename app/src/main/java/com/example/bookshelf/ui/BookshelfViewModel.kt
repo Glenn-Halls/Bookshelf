@@ -4,8 +4,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewModelScope
-import com.example.bookshelf.data.NetworkBookRepository
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
+import com.example.bookshelf.BookshelfApplication
+import com.example.bookshelf.data.BookRepository
 import com.example.bookshelf.network.Book
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -19,7 +24,7 @@ sealed interface NetworkUiState {
     object Error : NetworkUiState
     object Loading : NetworkUiState
 }
-class BookshelfViewModel : ViewModel() {
+class BookshelfViewModel(private val bookRepository: BookRepository) : ViewModel() {
 
     // Create observable state holder
     private val _uiState = MutableStateFlow(BookshelfUiState())
@@ -59,13 +64,22 @@ class BookshelfViewModel : ViewModel() {
         viewModelScope.launch {
             networkUiState = NetworkUiState.Loading
             networkUiState = try{
-                val dataRepository = NetworkBookRepository()
-                val searchResult = dataRepository.getBooks()
+                val searchResult = bookRepository.getBooks()
                 NetworkUiState.Success(searchResult.items)
             } catch (e: IOException) {
                 NetworkUiState.Error
             } catch (e: HttpException) {
                 NetworkUiState.Error
+            }
+        }
+    }
+
+    companion object {
+        val Factory: ViewModelProvider.Factory = viewModelFactory {
+            initializer {
+                val application = (this[APPLICATION_KEY] as BookshelfApplication)
+                val bookRepository = application.container.bookRepository
+                BookshelfViewModel(bookRepository = bookRepository)
             }
         }
     }
