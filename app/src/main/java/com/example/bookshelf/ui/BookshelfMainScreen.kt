@@ -47,6 +47,7 @@ fun BookshelfMainScreen(
                 onBackHandler = onBackButtonClick,
                 onTryAgainButton = { viewModel.doSearch() },
                 networkStatus = networkStatus,
+                viewModel = viewModel,
                 modifier = Modifier.padding(innerPadding)
             )
         }

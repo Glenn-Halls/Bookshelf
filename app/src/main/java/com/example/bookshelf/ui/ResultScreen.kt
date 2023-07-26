@@ -31,9 +31,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
+import com.example.bookshelf.R
 import com.example.bookshelf.network.Book
 import kotlinx.coroutines.delay
 
@@ -42,6 +46,7 @@ fun ResultScreen(
     onBackHandler: () -> Unit,
     onTryAgainButton: () -> Unit,
     networkStatus: NetworkUiState,
+    viewModel: BookshelfViewModel,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier.fillMaxSize()) {
@@ -51,7 +56,8 @@ fun ResultScreen(
             is NetworkUiState.Loading -> LoadingScreen()
             is NetworkUiState.Success -> SuccessScreen(
                 networkStatus.searchResult.size.toString(),
-                bookList = networkStatus.searchResult
+                bookList = networkStatus.searchResult,
+                viewModel = viewModel,
             )
         }
     }
@@ -61,6 +67,7 @@ fun ResultScreen(
 fun SuccessScreen(
     topText: String,
     bookList: List<Book>,
+    viewModel: BookshelfViewModel,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
@@ -80,6 +87,20 @@ fun SuccessScreen(
             Text(
                 text = it.bookInfo.bookCover!!.thumbnail.toString()
             )
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                AsyncImage(
+                    model = viewModel.getCoilUrl(it),
+                    contentDescription = null,
+                    placeholder = painterResource(id = R.drawable.loading_image),
+                    error = painterResource(id = R.drawable.broken_image),
+                    contentScale = ContentScale.FillWidth,
+                    modifier = Modifier.fillMaxWidth(.5f),
+                    alignment = Alignment.Center,
+                )
+            }
             Text(
                 text = "\n"
             )

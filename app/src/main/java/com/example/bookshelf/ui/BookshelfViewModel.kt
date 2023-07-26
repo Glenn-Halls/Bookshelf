@@ -74,6 +74,11 @@ class BookshelfViewModel(private val bookRepository: BookRepository) : ViewModel
         }
     }
 
+    fun getCoilUrl(book: Book): String {
+        val oldUrl: String = book.bookInfo!!.bookCover!!.thumbnail.toString()
+        return oldUrl.replace("http://", "https://")
+    }
+
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
