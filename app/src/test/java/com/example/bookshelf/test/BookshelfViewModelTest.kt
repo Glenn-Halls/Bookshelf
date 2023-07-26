@@ -20,6 +20,7 @@ class BookshelfViewModelTest {
             val viewModel = BookshelfViewModel(
                 bookRepository = FakeNetworkBookRepository()
             )
+            viewModel.getBooks()
             assertEquals(
                 viewModel.networkUiState,
                 NetworkUiState.Success(FakeDataSource.bookList)

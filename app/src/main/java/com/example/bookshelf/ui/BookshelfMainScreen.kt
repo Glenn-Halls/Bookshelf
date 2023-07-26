@@ -35,7 +35,7 @@ fun BookshelfMainScreen(
         }
     ) { innerPadding ->
         if (!uiState.searchComplete) {
-            SearchScreen(
+            BookshelfSearchScreen(
                 uiState = uiState,
                 networkStatus = networkStatus,
                 searchStringUpdate = { viewModel.updateSearchQuery(it) },
