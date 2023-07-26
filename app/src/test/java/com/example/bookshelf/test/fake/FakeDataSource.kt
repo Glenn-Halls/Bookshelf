@@ -11,7 +11,7 @@ object FakeDataSource {
     private const val BookLink1 = "BookLink01"
     private const val BookLink2 = "BookLink02"
     private const val BookLink3 = "BookLink03"
-    private val bookList = listOf(
+    val bookList = listOf(
         Book(BookName1, BookLink1),
         Book(BookName2, BookLink2),
         Book(BookName3, BookLink3),

@@ -36,6 +36,10 @@ class BookshelfViewModel(private val bookRepository: BookRepository) : ViewModel
     var networkUiState: NetworkUiState by mutableStateOf(NetworkUiState.Loading)
         private set
 
+    init {
+        getBooks()
+    }
+
 
     fun updateSearchQuery(query: String) {
         _uiState.update {
