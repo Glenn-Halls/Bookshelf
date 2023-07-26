@@ -22,10 +22,12 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    val viewModel: BookshelfViewModel = viewModel()
+                    val viewModel: BookshelfViewModel = viewModel(
+                        factory = BookshelfViewModel.Factory
+                    )
                     BookshelfMainScreen(
                         viewModel = viewModel,
-                        onBackButtonClick = { /*TODO*/ },
+                        onBackButtonClick = { viewModel.resetSearch() },
                     )
                 }
             }

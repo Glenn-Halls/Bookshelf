@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun BookshelfSearchScreen(
     uiState: BookshelfUiState,
+    networkStatus: NetworkUiState,
     searchStringUpdate: (String) -> Unit,
     onSearchClicked: () -> Unit,
     modifier: Modifier = Modifier
@@ -42,7 +43,8 @@ fun BookshelfSearchScreen(
                 text = "Test Data: " +
                         "\n${uiState.searchInstructions}" +
                         "\n${uiState.searchComplete}" +
-                        "\n${uiState.searchQuery}",
+                        "\n${uiState.searchQuery}" +
+                        "\n${networkStatus.toString()}",
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth()
             )
