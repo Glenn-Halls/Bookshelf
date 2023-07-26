@@ -1,4 +1,4 @@
-package com.example.bookshelf.test
+package com.example.bookshelf.test.fake
 
 import com.example.bookshelf.network.Book
 import com.example.bookshelf.network.SearchResult
