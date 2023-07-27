@@ -67,6 +67,15 @@ class BookshelfViewModel(private var bookRepository: BookRepository) : ViewModel
         networkUiState = NetworkUiState.Loading
     }
 
+    fun unSelectBook() {
+        _uiState.update {
+            it.copy(
+                bookSelected = null,
+                showBook = false
+            )
+        }
+    }
+
     fun getBooks() {
         viewModelScope.launch {
             networkUiState = NetworkUiState.Loading

@@ -1,5 +1,6 @@
 package com.example.bookshelf.ui
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -18,6 +19,7 @@ import com.example.bookshelf.network.Book
 
 @Composable
 fun BookshelfBookDetails(
+    onBackPressed: () -> Unit,
     book: Book,
     modifier: Modifier = Modifier
 ) {
@@ -25,6 +27,7 @@ fun BookshelfBookDetails(
         contentAlignment = Alignment.Center,
         modifier = modifier.fillMaxSize()
     ) {
+        BackHandler(onBack = onBackPressed)
         Column(
             modifier = Modifier
                 .fillMaxWidth()

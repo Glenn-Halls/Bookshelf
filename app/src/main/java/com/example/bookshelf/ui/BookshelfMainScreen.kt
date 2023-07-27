@@ -31,7 +31,9 @@ fun BookshelfMainScreen(
     Scaffold(
         topBar = {
             BookshelfTopAppBar(
-                onUpButtonClick = onBackButtonClick
+                onUpButtonClick = if (uiState.showBook) {
+                    { viewModel.unSelectBook() }
+                } else { onBackButtonClick }
             )
         }
     ) { innerPadding ->
@@ -46,6 +48,7 @@ fun BookshelfMainScreen(
         } else if (uiState.showBook) {
             BookshelfBookDetails(
                 book = uiState.bookSelected ?: Book("", ""),
+                onBackPressed = { viewModel.unSelectBook() },
                 modifier = Modifier.padding(innerPadding)
             )
         } else {
