@@ -79,6 +79,16 @@ class BookshelfViewModel(private val bookRepository: BookRepository) : ViewModel
         return oldUrl.replace("http://", "https://")
     }
 
+    fun getBriefDescription(book: Book) : String {
+        val originalDescription: String = book.bookInfo!!.description ?: "Description not available"
+        return if (originalDescription.length > 200) {
+            originalDescription
+                .take(197)
+                .replaceAfterLast(' ', "")
+                .dropLast(1) + "..."
+        } else originalDescription
+    }
+
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {

@@ -9,18 +9,25 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -45,6 +52,7 @@ import kotlinx.coroutines.delay
 fun ResultScreen(
     onBackHandler: () -> Unit,
     onTryAgainButton: () -> Unit,
+    onCardClick: (Book) -> Unit,
     networkStatus: NetworkUiState,
     viewModel: BookshelfViewModel,
     modifier: Modifier = Modifier,
@@ -57,7 +65,9 @@ fun ResultScreen(
             is NetworkUiState.Success -> SuccessScreen(
                 networkStatus.searchResult.size.toString(),
                 bookList = networkStatus.searchResult,
+                onCardClick = onCardClick,
                 viewModel = viewModel,
+                modifier = Modifier.fillMaxSize()
             )
         }
     }
@@ -67,43 +77,84 @@ fun ResultScreen(
 fun SuccessScreen(
     topText: String,
     bookList: List<Book>,
+    onCardClick: (Book) -> Unit,
     viewModel: BookshelfViewModel,
     modifier: Modifier = Modifier,
 ) {
-    Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+    Column(modifier = modifier) {
         Text(
             text = "Your search yielded $topText results:\n",
         )
-        bookList.forEach {
+        BookGrid(books = bookList, viewModel = viewModel, onCardClick = onCardClick)
+    }
+}
+
+@Composable
+fun BookGrid(
+    books: List<Book>,
+    viewModel: BookshelfViewModel,
+    onCardClick: (Book) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    LazyVerticalGrid(
+        columns = GridCells.Adaptive(minSize = 300.dp),
+        modifier = modifier.fillMaxWidth(),
+        contentPadding = PaddingValues(8.dp),
+    ) {
+        items(
+            items = books,
+            key = { book -> book.id }
+        ) {
+            book -> BookCard(book = book, viewModel = viewModel, onCardClick = onCardClick)
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun BookCard(
+    book: Book,
+    viewModel: BookshelfViewModel,
+    onCardClick: (Book) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Card(
+        elevation = CardDefaults.cardElevation(),
+        onClick = { onCardClick },
+        modifier = modifier.padding(8.dp),
+    ) {
+        Column(
+            verticalArrangement = Arrangement.SpaceBetween,
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .height(450.dp)
+                .padding(8.dp)
+        ) {
             Text(
-                text = it.bookInfo!!.title.toString()
+                text = book.bookInfo!!.title!!,
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.displayMedium
             )
             Text(
-                text = it.bookInfo.date.toString()
+                text = book.bookInfo.date ?: "publish date unknown",
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.labelMedium
             )
             Text(
-                text = it.bookInfo.description.toString()
+                text = viewModel.getBriefDescription(book),
+                textAlign = TextAlign.Start,
+                style = MaterialTheme.typography.labelMedium
             )
-            Text(
-                text = it.bookInfo.bookCover!!.thumbnail.toString()
+            AsyncImage(
+                model = viewModel.getCoilUrl(book),
+                contentDescription = null,
+                placeholder = painterResource(id = R.drawable.loading_image),
+                error = painterResource(id = R.drawable.broken_image),
+                contentScale = ContentScale.FillWidth,
+                modifier = Modifier.fillMaxWidth(.45f),
+                alignment = Alignment.Center,
             )
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                AsyncImage(
-                    model = viewModel.getCoilUrl(it),
-                    contentDescription = null,
-                    placeholder = painterResource(id = R.drawable.loading_image),
-                    error = painterResource(id = R.drawable.broken_image),
-                    contentScale = ContentScale.FillWidth,
-                    modifier = Modifier.fillMaxWidth(.5f),
-                    alignment = Alignment.Center,
-                )
-            }
-            Text(
-                text = "\n"
-            )
+            Spacer(modifier = modifier.padding(1.dp))
         }
     }
 }

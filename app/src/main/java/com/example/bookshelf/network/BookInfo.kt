@@ -8,7 +8,7 @@ data class BookInfo(
     val title: String? = "Title Not Available",
     @SerialName(value = "publishedDate")
     val date: String? = "Date Not Available",
-    val description: String? = "",
+    val description: String? = "Description not available",
     @SerialName(value = "imageLinks")
     val bookCover: BookCover? = BookCover()
 )

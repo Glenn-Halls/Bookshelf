@@ -16,11 +16,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.example.bookshelf.R
+import com.example.bookshelf.network.Book
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BookshelfMainScreen(
     viewModel: BookshelfViewModel,
+    onCardClick: (Book) -> Unit,
     onBackButtonClick: () -> Unit,
 ) {
     // uiState holds all state values needed by subsequent Composables
@@ -48,6 +50,7 @@ fun BookshelfMainScreen(
                 onTryAgainButton = { viewModel.doSearch() },
                 networkStatus = networkStatus,
                 viewModel = viewModel,
+                onCardClick = onCardClick,
                 modifier = Modifier.padding(innerPadding)
             )
         }
