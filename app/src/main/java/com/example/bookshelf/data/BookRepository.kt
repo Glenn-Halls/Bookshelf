@@ -8,7 +8,8 @@ interface BookRepository {
 }
 
 class NetworkBookRepository(
-    private val bookApiService: BookshelfApiService
+    private val bookApiService: BookshelfApiService,
+    private val string: String
 ) : BookRepository{
-    override suspend fun getBooks(): SearchResult = bookApiService.getBooks()
+    override suspend fun getBooks(): SearchResult = bookApiService.getBooks(string, "40")
 }

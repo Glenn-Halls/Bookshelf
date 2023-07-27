@@ -8,9 +8,10 @@ import retrofit2.Retrofit
 
 interface AppContainer {
     val bookRepository: BookRepository
+    var searchString: String
 }
 
-class DefaultAppContainer : AppContainer {
+class DefaultAppContainer(override var searchString: String = "Jazz") : AppContainer {
 
     private val baseUrl = "https://www.googleapis.com"
     private val json = Json { ignoreUnknownKeys = true }
@@ -20,12 +21,12 @@ class DefaultAppContainer : AppContainer {
         .baseUrl(baseUrl)
         .build()
 
-    private val retrofitService : BookshelfApiService by lazy {
+    val retrofitService : BookshelfApiService by lazy {
         retrofit.create(BookshelfApiService::class.java)
     }
 
     override val bookRepository: BookRepository by lazy {
-        NetworkBookRepository(retrofitService)
+        NetworkBookRepository(retrofitService,searchString)
     }
 
 }

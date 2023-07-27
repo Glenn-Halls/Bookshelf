@@ -11,6 +11,8 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.bookshelf.BookshelfApplication
 import com.example.bookshelf.data.BookRepository
+import com.example.bookshelf.data.DefaultAppContainer
+import com.example.bookshelf.data.NetworkBookRepository
 import com.example.bookshelf.network.Book
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -24,7 +26,7 @@ sealed interface NetworkUiState {
     object Error : NetworkUiState
     object Loading : NetworkUiState
 }
-class BookshelfViewModel(private val bookRepository: BookRepository) : ViewModel() {
+class BookshelfViewModel(private var bookRepository: BookRepository) : ViewModel() {
 
     // Create observable state holder
     private val _uiState = MutableStateFlow(BookshelfUiState())
@@ -41,6 +43,10 @@ class BookshelfViewModel(private val bookRepository: BookRepository) : ViewModel
         _uiState.update {
             it.copy(searchQuery = query)
         }
+        bookRepository = NetworkBookRepository(
+            bookApiService = DefaultAppContainer().retrofitService,
+            string = query,
+        )
     }
 
     fun doSearch() {
