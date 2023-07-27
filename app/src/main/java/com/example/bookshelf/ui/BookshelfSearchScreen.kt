@@ -40,13 +40,10 @@ fun BookshelfSearchScreen(
                 .fillMaxSize()
         ) {
             Text(
-                text = "Test Data: " +
-                        "\n${uiState.searchInstructions}" +
-                        "\n${uiState.searchComplete}" +
-                        "\n${uiState.searchQuery}" +
-                        "\n${networkStatus.toString()}",
+                text = uiState.searchInstructions,
                 textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth()
+                style = MaterialTheme.typography.labelLarge,
+                modifier = Modifier.fillMaxWidth(.5f)
             )
 
         }

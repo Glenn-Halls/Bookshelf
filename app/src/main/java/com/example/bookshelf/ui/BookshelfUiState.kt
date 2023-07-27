@@ -8,6 +8,6 @@ data class BookshelfUiState(
     val numResults: Int = 0,
     var showBook: Boolean = false,
     val bookSelected: Book?,
-    val searchInstructions: String = "Search below",
+    val searchInstructions: String = "Enter a search term to begin your browsing journey!",
     val searchButtonTitle: String = "Browse Books",
 )

@@ -57,7 +57,7 @@ fun BookshelfMainScreen(
                 onTryAgainButton = { viewModel.doSearch() },
                 networkStatus = networkStatus,
                 viewModel = viewModel,
-                topText = uiState.numResults.toString() + uiState.showBook,
+                topText = uiState.numResults.toString(),
                 onCardClick = { viewModel.selectBook(it) },
                 modifier = Modifier.padding(innerPadding)
             )
