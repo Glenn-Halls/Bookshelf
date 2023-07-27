@@ -29,8 +29,7 @@ sealed interface NetworkUiState {
 class BookshelfViewModel(private var bookRepository: BookRepository) : ViewModel() {
 
     // Create observable state holder
-    private val _uiState = MutableStateFlow(BookshelfUiState())
-
+    private val _uiState = MutableStateFlow(BookshelfUiState(bookSelected = null))
     // Create accessor to state values
     val uiState: StateFlow<BookshelfUiState> = _uiState
 
@@ -61,6 +60,8 @@ class BookshelfViewModel(private var bookRepository: BookRepository) : ViewModel
             it.copy(
                 searchComplete = false,
                 searchQuery = "",
+                bookSelected = null,
+                showBook = false
             )
         }
         networkUiState = NetworkUiState.Loading
@@ -98,6 +99,15 @@ class BookshelfViewModel(private var bookRepository: BookRepository) : ViewModel
                 .replaceAfterLast(' ', "")
                 .dropLast(1) + "..."
         } else originalDescription
+    }
+
+    fun selectBook(book: Book) {
+        _uiState.update {
+            it.copy(
+                bookSelected = book,
+                showBook = true
+            )
+        }
     }
 
     companion object {

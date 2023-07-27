@@ -123,7 +123,7 @@ fun BookCard(
 ) {
     Card(
         elevation = CardDefaults.cardElevation(),
-        onClick = { onCardClick },
+        onClick = { onCardClick(book) },
         modifier = modifier.padding(8.dp),
     ) {
         Column(

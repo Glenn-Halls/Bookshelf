@@ -22,13 +22,11 @@ import com.example.bookshelf.network.Book
 @Composable
 fun BookshelfMainScreen(
     viewModel: BookshelfViewModel,
-    onCardClick: (Book) -> Unit,
     onBackButtonClick: () -> Unit,
 ) {
     // uiState holds all state values needed by subsequent Composables
     val uiState = viewModel.uiState.collectAsState().value
     val networkStatus = viewModel.networkUiState
-    val numResults = uiState.numResults.toString()
 
     Scaffold(
         topBar = {
@@ -45,14 +43,19 @@ fun BookshelfMainScreen(
                 onSearchClicked = { viewModel.doSearch() },
                 modifier = Modifier.padding(innerPadding)
             )
+        } else if (uiState.showBook) {
+            BookshelfBookDetails(
+                book = uiState.bookSelected ?: Book("", ""),
+                modifier = Modifier.padding(innerPadding)
+            )
         } else {
             ResultScreen(
                 onBackHandler = onBackButtonClick,
                 onTryAgainButton = { viewModel.doSearch() },
                 networkStatus = networkStatus,
                 viewModel = viewModel,
-                topText = numResults,
-                onCardClick = onCardClick,
+                topText = uiState.numResults.toString() + uiState.showBook,
+                onCardClick = { viewModel.selectBook(it) },
                 modifier = Modifier.padding(innerPadding)
             )
         }
