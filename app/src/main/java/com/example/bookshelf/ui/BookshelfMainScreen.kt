@@ -28,6 +28,7 @@ fun BookshelfMainScreen(
     // uiState holds all state values needed by subsequent Composables
     val uiState = viewModel.uiState.collectAsState().value
     val networkStatus = viewModel.networkUiState
+    val numResults = uiState.numResults.toString()
 
     Scaffold(
         topBar = {
@@ -50,6 +51,7 @@ fun BookshelfMainScreen(
                 onTryAgainButton = { viewModel.doSearch() },
                 networkStatus = networkStatus,
                 viewModel = viewModel,
+                topText = numResults,
                 onCardClick = onCardClick,
                 modifier = Modifier.padding(innerPadding)
             )

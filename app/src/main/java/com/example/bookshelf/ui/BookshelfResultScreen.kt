@@ -53,6 +53,7 @@ fun ResultScreen(
     onBackHandler: () -> Unit,
     onTryAgainButton: () -> Unit,
     onCardClick: (Book) -> Unit,
+    topText: String,
     networkStatus: NetworkUiState,
     viewModel: BookshelfViewModel,
     modifier: Modifier = Modifier,
@@ -63,7 +64,7 @@ fun ResultScreen(
             is NetworkUiState.Error -> ErrorScreen(onTryAgainButton)
             is NetworkUiState.Loading -> LoadingScreen()
             is NetworkUiState.Success -> SuccessScreen(
-                networkStatus.searchResult.size.toString(),
+                topText = topText,
                 bookList = networkStatus.searchResult,
                 onCardClick = onCardClick,
                 viewModel = viewModel,
@@ -84,6 +85,8 @@ fun SuccessScreen(
     Column(modifier = modifier) {
         Text(
             text = "Your search yielded $topText results:\n",
+            textAlign = TextAlign.Center,
+            modifier = Modifier.fillMaxWidth()
         )
         BookGrid(books = bookList, viewModel = viewModel, onCardClick = onCardClick)
     }
@@ -129,6 +132,7 @@ fun BookCard(
             modifier = Modifier
                 .height(450.dp)
                 .padding(8.dp)
+                .fillMaxWidth()
         ) {
             Text(
                 text = book.bookInfo!!.title!!,

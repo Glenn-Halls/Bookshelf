@@ -71,6 +71,11 @@ class BookshelfViewModel(private var bookRepository: BookRepository) : ViewModel
             networkUiState = NetworkUiState.Loading
             networkUiState = try{
                 val searchResult = bookRepository.getBooks()
+                _uiState.update {
+                    it.copy(
+                        numResults = searchResult.totalItems
+                    )
+                }
                 NetworkUiState.Success(searchResult.items)
             } catch (e: IOException) {
                 NetworkUiState.Error
